@@ -8,3 +8,10 @@
     border-bottom: 2px solid #ffa000;
     border-top: 2px solid #ffa000;
 }
+
+.logo {
+    width: 40px;
+    margin-right: 20px;
+    margin-left: 8px;
+    margin-top: 12px;
+}
