@@ -12,9 +12,9 @@ const App = () => {
       <Header />
       <div className={styles.container}>
         <Aside />
-        <Origamies />
-        <Footer />
+        <Origamies /> 
       </div>
+      <Footer />
     </div>
   );
 }
