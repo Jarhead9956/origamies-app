@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import Origami from '../origami';
-import styles from './index.module.css';
+import PageLayout from '../../components/page-layout'
+import styles from './homePage.module.css';
+import Origami from '../../components/origami';
+import Title from '../../components/title';
 
-class Origamies extends Component {
+class HomePage extends Component {
     constructor(props) {
         super(props)
 
@@ -35,14 +37,21 @@ class Origamies extends Component {
 
     render () {
         return (
-            <div className={styles.container}>
-                <h1 className={styles.title}>Origamies</h1>
-                <div className={styles.posts}>
-                    {this.renderOrigamies()}
-                </div>
+          <PageLayout>
+            <Title title='Publication' />
+            <div className={styles.posts}>
+                {this.renderOrigamies()}
             </div>
+          </PageLayout>
         )
     }
 }
 
-export default Origamies
+export default HomePage
+
+
+    
+
+
+
+
