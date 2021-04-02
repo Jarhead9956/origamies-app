@@ -15,7 +15,7 @@ class HomePage extends Component {
 
     renderOrigamies() {
         const { origamies } = this.state;
-
+        
         return origamies.map(( origami, index ) => {
             return (
                 <Origami key={origami._id} index={ index + 1 } {...origami} />
