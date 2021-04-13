@@ -10,42 +10,76 @@ class LoginPage extends Component {
         super(props)
 
         this.state = {
-            email: '',
-            password: ''
+            username: '',
+            password: '',
+            loginError: false
         }
     }
 
-    onChange = (event, type) => {
+    handleChange = (event, type) => {
         const newState = {}
         newState[type] = event.target.value
 
         this.setState(newState)
     }
 
+    handleSubmit = (event) => {
+        event.preventDefault()
+
+        const {
+            username,
+            password
+        } = this.state
+
+        fetch('http://localhost:9999/api/user/login', {
+            method: 'POST',
+            body: JSON.stringify({username, password}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(promise => {
+            const authToken = promise.headers.get('Autorization')
+            if(authToken) {
+                document.cookie = `x-auth-token=${authToken}`
+            }
+            return promise.json()
+        }).then(data => {
+            if(data.username && document.cookie){
+                this.props.history.push('/')
+            }
+        }).catch(e => {
+            this.setState({
+                loginError: true
+            })
+        })
+    }
+
     render() {
         const {
-            email,
+            username,
             password
         } = this.state
 
         return(
             <PageLayout>
-                <div className={styles.container}>
+                <form className={styles.container} onSubmit={this.handleSubmit}>
                     <Title title='Login page' />
                     <Input 
-                        label='Email' 
-                        value={ email }
-                        onChange={(e) => this.onChange(e, 'email')} 
-                        id='email'>
+                        label='Username' 
+                        value={ username }
+                        onChange={(e) => this.handleChange(e, 'username')} 
+                        id='username'>
                     </Input>
                     <Input 
+                        type="password"
                         label='Password' 
                         value={ password } 
-                        onChange={(e) => this.onChange(e, 'password')} 
+                        onChange={(e) => this.handleChange(e, 'password')} 
                         id='password'>
                     </Input>
-                    <SubmitButton title='Login' />
-                </div> 
+                    {this.state.loginError ? (<div>Wrong username or password</div>) : null}
+                    <SubmitButton type="submit" title='Login' />
+                </form> 
             </PageLayout>
         )
     }

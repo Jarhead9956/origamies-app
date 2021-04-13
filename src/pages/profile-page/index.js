@@ -15,9 +15,10 @@ class ProfilePage extends Component {
 
     renderMyOrigamies() {
         const { myPosts } = this.state;
-        return myPosts.map(( post, index ) => {
+
+        return myPosts.map(( post, index) => {
             return (
-                <Origami key={post._id} index={ index + 1 } {...post} />
+                <Origami key={post._id} index={ index + 1 } author={this.state} description={post.description} />
             )
         })
     }
@@ -28,6 +29,7 @@ class ProfilePage extends Component {
         .then(response => response.json())
         .then((data) => {
             data.map((user) => {
+                console.log(user)
                 this.setState({
                     myPosts: user.posts,
                     username: user.username
@@ -47,7 +49,7 @@ class ProfilePage extends Component {
         return(
             <PageLayout>
                 <div className={styles.container}>
-                    <img className={styles.img} src='https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80'></img>
+                    <img className={styles.img} alt='Profile ' src='https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80'></img>
                     <div className={styles['personal-info']}>
                         <p>
                             <span>Username: </span>

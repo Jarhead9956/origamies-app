@@ -36,12 +36,16 @@ class HomePage extends Component {
     }
 
     render () {
+        const { origamies } = this.state
         return (
           <PageLayout>
             <Title title='Publication' />
+            {origamies ? 
             <div className={styles.posts}>
                 {this.renderOrigamies()}
             </div>
+            : (<div>No posts yet!</div>)
+            }
           </PageLayout>
         )
     }
