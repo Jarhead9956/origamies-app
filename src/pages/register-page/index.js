@@ -4,6 +4,7 @@ import Title from '../../components/title'
 import SubmitButton from '../../components/buttons/submit-button'
 import Input from '../../components/input'
 import styles from './index.module.css'
+import UserContext from '../../Context'
 
 class RegisterPage extends Component {
     constructor(props) {
@@ -16,6 +17,9 @@ class RegisterPage extends Component {
             registerError: false
         }
     }
+
+    static contextType = UserContext
+
 
     handleChange = (event, type) => {
         const newState = {}
@@ -56,6 +60,7 @@ class RegisterPage extends Component {
             return promise.json()
         }).then(data => {
             if(data.username && document.cookie){
+                this.context.logIn(data)
                 this.props.history.push('/')
             }
         }).catch(e => {
