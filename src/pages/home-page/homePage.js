@@ -3,6 +3,7 @@ import PageLayout from '../../components/page-layout'
 import styles from './homePage.module.css';
 import Origami from '../../components/origami';
 import Title from '../../components/title';
+import UserContext from '../../Context'
 
 class HomePage extends Component {
     constructor(props) {
@@ -12,6 +13,9 @@ class HomePage extends Component {
             origamies: []
         };
     }
+
+    static contextType = UserContext
+
 
     renderOrigamies() {
         const { origamies } = this.state;

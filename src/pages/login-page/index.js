@@ -3,6 +3,7 @@ import PageLayout from '../../components/page-layout'
 import Title from '../../components/title'
 import SubmitButton from '../../components/buttons/submit-button'
 import Input from '../../components/input'
+import UserContext from '../../Context'
 import styles from './index.module.css'
 
 class LoginPage extends Component {
@@ -15,6 +16,8 @@ class LoginPage extends Component {
             loginError: false
         }
     }
+
+    static contextType = UserContext
 
     handleChange = (event, type) => {
         const newState = {}
@@ -44,7 +47,9 @@ class LoginPage extends Component {
             }
             return promise.json()
         }).then(data => {
+
             if(data.username && document.cookie){
+                this.context.logIn(data)
                 this.props.history.push('/')
             }
         }).catch(e => {
