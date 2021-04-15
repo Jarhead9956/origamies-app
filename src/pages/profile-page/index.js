@@ -1,7 +1,9 @@
 import React, {Component} from "react"
 import PageLayout from '../../components/page-layout'
 import Origami from '../../components/origami'
+import UserContext from '../../Context'
 import styles from './index.module.css'
+import SubmitButton from '../../components/buttons/submit-button'
 
 class ProfilePage extends Component {
     constructor(props) {
@@ -9,31 +11,44 @@ class ProfilePage extends Component {
 
         this.state = {
             myPosts: [],
-            username: ''
+            username: '',
+            author: null
         }
     }
+
+    static contextType = UserContext
 
     renderMyOrigamies() {
         const { myPosts } = this.state;
 
         return myPosts.map(( post, index) => {
             return (
-                <Origami key={post._id} index={ index + 1 } author={this.state} description={post.description} />
+                <Origami key={post._id} index={ index + 1 } author={this.state.author} description={post.description} />
             )
         })
     }
 
+    logOut= () => {
+        this.context.logOut()
+
+        this.props.history.push('/')
+    }
+
 
     componentDidMount() {
-        fetch('http://localhost:9999/api/user')
+        const userId = this.props.match.params.userid
+        fetch(`http://localhost:9999/api/user?id=${userId}`)
         .then(response => response.json())
         .then((data) => {
             data.map((user) => {
-                console.log(user)
-                this.setState({
-                    myPosts: user.posts,
-                    username: user.username
-                })
+                if(user._id === userId){
+                    this.setState({
+                        myPosts: user.posts,
+                        username: user.username,
+                        author: user
+                    })
+                }
+                
             })
         })
         .catch((e) => console.log(e))
@@ -44,7 +59,6 @@ class ProfilePage extends Component {
             username,
             myPosts
         } = this.state
-
 
         return(
             <PageLayout>
@@ -60,6 +74,7 @@ class ProfilePage extends Component {
                             {myPosts.length}
                         </p>
                     </div>
+                    <button onClick={this.logOut}>Logout</button>
                 </div>
                 {this.renderMyOrigamies()}
             </PageLayout>

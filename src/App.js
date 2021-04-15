@@ -19,6 +19,7 @@ class App extends Component {
     }
 
     logOut = () => {
+        document.cookie = 'x-auth-token='
         this.setState({
             loggedIn: false,
             user: null
@@ -36,7 +37,7 @@ class App extends Component {
                 loggedIn,
                 user,
                 logIn: this.logIn,
-                logOut: this.logOut
+                logOut: this.logOut 
             }}>
                 {this.props.children}
             </UserContext.Provider>
