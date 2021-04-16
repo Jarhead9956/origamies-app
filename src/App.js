@@ -6,9 +6,14 @@ class App extends Component {
         super(props)
 
         this.state = {
-            loggedIn: false,
+            loggedIn: null,
             user: null
         }
+    }
+
+    getCookie = (name) => {
+        var cookieName = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return cookieName ? cookieName[2] : null;
     }
 
     logIn = (user) => {
@@ -19,10 +24,37 @@ class App extends Component {
     }
 
     logOut = () => {
-        document.cookie = 'x-auth-token='
+        document.cookie = "x-auth-token=cookievalue; expires= Thu, 21 Aug 2014 20:00:00 UTC"
         this.setState({
             loggedIn: false,
             user: null
+        })
+    }
+
+    componentDidMount() {
+        const token = this.getCookie('x-auth-token')
+
+        if(!token) {
+            this.logOut()
+            return
+        }
+
+        fetch('http://localhost:9999/api/user/verify', {
+            method: 'POST',
+            body: JSON.stringify({
+                token
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(promise => {
+            return promise.json()
+        }).then(response => {
+            if(response.status){
+                this.logIn(response.user)
+            }else{
+                this.logOut()
+            }
         })
     }
 
@@ -32,6 +64,9 @@ class App extends Component {
             user
         } = this.state
 
+        if(loggedIn === null) {
+           return <div>Loading...</div>
+        }
         return(
             <UserContext.Provider value={{
                 loggedIn,
